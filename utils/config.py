@@ -106,8 +106,6 @@ universal = arg.universal
 act = arg.act
 act_loss_weight = arg.act_loss_weight
 
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%m-%d %H:%M')#,filename='save/logs/{}.log'.format(str(name)))
 collect_stats = False
 
 
