@@ -2,7 +2,8 @@ MoEL: Mixture of Empathetic Listeners
 ====
 
 This repository contains the MindSpore implementation of the paper: **MoEL: Mixture of Empathetic Listeners.** Zhaojiang Lin, Andrea Madotto, Jamin Shin, Peng Xu, Pascale Fung *EMNLP 2019* [PDF](https://arxiv.org/pdf/1908.07687.pdf).
-This code refers to the [code](https://github.com/HLTCHKUST/MoEL).
+
+And this code refers to [code](https://github.com/HLTCHKUST/MoEL).
 
 Setup
 ---
