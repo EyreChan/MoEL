@@ -5,7 +5,7 @@ This repository contains the MindSpore implementation of the paper:
 
 **MoEL: Mixture of Empathetic Listeners.**  Zhaojiang Lin, Andrea Madotto, Jamin Shin, Peng Xu, Pascale Fung *EMNLP 2019* [PDF](https://arxiv.org/pdf/1908.07687.pdf).
 
-And this code refers to the [PyTorch implementation](https://github.com/HLTCHKUST/MoEL).
+And this code refers to the [PyTorch implementation](https://github.com/HLTCHKUST/MoEL) of the paper mentioned above.
 
 Setup
 ---
