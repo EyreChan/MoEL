@@ -14,9 +14,9 @@ Install the required libraries (Python 3.7.5 | CUDA 11.1) and run the command:
 
 `pip install mindspore-cuda11-dev -i https://pypi.tuna.tsinghua.edu.cn/simple`
 
-Download [Pretrained GloVe Embeddings](http://nlp.stanford.edu/data/glove.6B.zip)((glove.6B.300d.txt)) and save it in /vectors.
+Download [Pretrained GloVe Embeddings](http://nlp.stanford.edu/data/glove.6B.zip)((glove.6B.300d.txt)) and save it in `/vectors`.
 
-Download dataset from [https://github.com/HLTCHKUST/MoEL/tree/master/empathetic-dialogue](https://github.com/HLTCHKUST/MoEL/tree/master/empathetic-dialogue) and save it in /empathetic-dialogue.
+Download dataset from [https://github.com/HLTCHKUST/MoEL/tree/master/empathetic-dialogue](https://github.com/HLTCHKUST/MoEL/tree/master/empathetic-dialogue) and save it in `/empathetic-dialogue`.
 
 Training & Testing
 ---
