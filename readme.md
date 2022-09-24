@@ -12,6 +12,7 @@ Setup
 
 1. Install the required libraries (Python 3.7.5 | CUDA 11.1)
 2. Run the command:
+  
   `pip install mindspore-cuda11-dev -i https://pypi.tuna.tsinghua.edu.cn/simple`
 
 3. Download [Pretrained GloVe Embeddings](http://nlp.stanford.edu/data/glove.6B.zip)((glove.6B.300d.txt)) and save it in `/vectors`.
