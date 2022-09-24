@@ -22,8 +22,6 @@ parser.add_argument("--batch_size", type=int, default=16)
 parser.add_argument("--lr", type=float, default=0.0001)
 parser.add_argument("--max_grad_norm", type=float, default=2.0)
 parser.add_argument("--beam_size", type=int, default=5)
-parser.add_argument("--save_path", type=str, default="save/test/")
-parser.add_argument("--save_path_dataset", type=str, default="save/")
 parser.add_argument("--cuda", action="store_true")
 
 parser.add_argument("--oracle", action="store_true")
@@ -95,14 +93,6 @@ epochs = 10000
 
 emb_file = arg.emb_file or "vectors/glove.6B.{}d.txt".format(str(emb_dim))
 pretrain_emb = arg.pretrain_emb
-
-save_path = arg.save_path
-save_path_dataset = arg.save_path_dataset
-
-test = arg.test
-if(not test):
-    save_path_dataset = save_path
-
 
 ### transformer 
 hop = arg.hop
