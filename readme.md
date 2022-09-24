@@ -20,4 +20,4 @@ Setup
 Training & Testing
 ---
 
-`python3 main.py --emb_dim 300 --hidden_dim 300 --hop 1 --heads 2 --topk 5 --cuda --pretrain_emb --basic_learner --schedule 10000 --save_path save/moel/`
+`python3 main.py --emb_dim 300 --hidden_dim 300 --hop 1 --heads 2 --topk 5 --cuda --pretrain_emb --basic_learner --schedule 10000`
