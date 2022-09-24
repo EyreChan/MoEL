@@ -10,13 +10,14 @@ And this code refers to the [PyTorch implementation](https://github.com/HLTCHKUS
 Setup
 ---
 
-Install the required libraries (Python 3.7.5 | CUDA 11.1) and run the command:
+1. Install the required libraries (Python 3.7.5 | CUDA 11.1)
+2. Run the command:
 
 `pip install mindspore-cuda11-dev -i https://pypi.tuna.tsinghua.edu.cn/simple`
 
-Download [Pretrained GloVe Embeddings](http://nlp.stanford.edu/data/glove.6B.zip)((glove.6B.300d.txt)) and save it in `/vectors`.
+3.Download [Pretrained GloVe Embeddings](http://nlp.stanford.edu/data/glove.6B.zip)((glove.6B.300d.txt)) and save it in `/vectors`.
 
-Download dataset from [https://github.com/HLTCHKUST/MoEL/tree/master/empathetic-dialogue](https://github.com/HLTCHKUST/MoEL/tree/master/empathetic-dialogue) and save it in `/empathetic-dialogue`.
+4.Download dataset from [https://github.com/HLTCHKUST/MoEL/tree/master/empathetic-dialogue](https://github.com/HLTCHKUST/MoEL/tree/master/empathetic-dialogue) and save it in `/empathetic-dialogue`.
 
 Training & Testing
 ---
