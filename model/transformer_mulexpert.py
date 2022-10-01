@@ -291,11 +291,6 @@ class Transformer_experts(nn.Cell):
         
         self.attention_activation = nn.Softmax(axis=1)
 
-        self.model_dir = config.save_path
-        if not os.path.exists(self.model_dir):
-            os.makedirs(self.model_dir)
-        self.best_path = ""
-
     def construct(self, inputs, iter, train=True):
         enc_batch = inputs["input_batch"].astype(mindspore.float32)
         dec_batch = inputs["target_batch"].astype(mindspore.float32)
