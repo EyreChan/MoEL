@@ -94,3 +94,22 @@ def prepare_data_seq(batch_size=32):
 
     # write_config()
     return dataset_train, dataset_test, vocab, len(emo_map)
+
+def prepare_data_seq_without_bz():  
+    pairs_tra, pairs_tst, vocab = load_dataset()
+
+    log.warning("Vocab  {} ".format(vocab.n_words))
+
+    dataset_train = Dataset(pairs_tra, vocab)
+    emo_map = dataset_train.emo_map
+    dataset_train = ds.GeneratorDataset(dataset_train, ["input_batch", "input_lengths", \
+                    "mask_input", "target_batch", "target_lengths", "target_program", \
+                    "program_label"], shuffle=True)
+
+    dataset_test = Dataset(pairs_tst, vocab)
+    dataset_test = ds.GeneratorDataset(dataset_test, ["input_batch", "input_lengths", \
+                    "mask_input", "target_batch", "target_lengths", "target_program", \
+                    "program_label"], shuffle=True)
+
+    # write_config()
+    return dataset_train, dataset_test, vocab, len(emo_map)

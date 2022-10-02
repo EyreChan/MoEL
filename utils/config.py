@@ -24,7 +24,6 @@ parser.add_argument("--max_grad_norm", type=float, default=2.0)
 parser.add_argument("--beam_size", type=int, default=5)
 parser.add_argument("--cuda", action="store_true")
 
-parser.add_argument("--oracle", action="store_true")
 parser.add_argument("--basic_learner", action="store_true")
 parser.add_argument("--topk", type=int, default=0)
 parser.add_argument("--l1", type=float, default=.0)
@@ -67,7 +66,6 @@ print_opts(arg)
 large_decoder = arg.large_decoder
 topk = arg.topk
 l1 = arg.l1
-oracle = arg.oracle
 basic_learner = arg.basic_learner
 multitask = arg.multitask
 mean_query = arg.mean_query

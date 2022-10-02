@@ -291,16 +291,11 @@ class Transformer_experts(nn.Cell):
         
         self.attention_activation = nn.Softmax(axis=1)
 
-    def construct(self, inputs, iter, train=True):
-        enc_batch = inputs["input_batch"].astype(mindspore.float32)
-        dec_batch = inputs["target_batch"].astype(mindspore.float32)
-        mask_input = inputs["mask_input"].astype(mindspore.float32)
-        target_program = inputs["target_program"].astype(mindspore.float32)
-        
+    def construct(self, input_batch, target_batch, mask_input, target_program):
         ## Encode
-        mask_src = ops.expand_dims(ops.equal(enc_batch, config.PAD_idx), 1)
+        mask_src = ops.expand_dims(ops.equal(input_batch, config.PAD_idx), 1)
         emb_mask = self.embedding(mask_input).astype(mindspore.float32)
-        encoder_outputs = self.encoder(self.embedding(enc_batch) + emb_mask, mask_src).astype(mindspore.float32)
+        encoder_outputs = self.encoder(self.embedding(input_batch) + emb_mask, mask_src).astype(mindspore.float32)
 
         ## Attention over decoder
         q_h = encoder_outputs[:,0]
@@ -315,26 +310,17 @@ class Transformer_experts(nn.Cell):
             attention_parameters = self.attention_activation(logit_prob_.astype(mindspore.float32))
         else:
             attention_parameters = self.attention_activation(logit_prob.astype(mindspore.float32))
-
-        if(config.oracle): attention_parameters = self.attention_activation(Tensor(target_program).astype(mindspore.float32)*1000)
         
         attention_parameters = ops.expand_dims(ops.expand_dims(attention_parameters, -1), -1) # (batch_size, expert_num, 1, 1)
 
         # Decode 
-        sos_token = ops.expand_dims(Tensor([config.SOS_idx] * enc_batch.shape[0]), 1)
-        dec_batch_shift = ops.concat((sos_token.astype(mindspore.float32), dec_batch[:, :-1].astype(mindspore.float32)), axis=1)
+        sos_token = ops.expand_dims(Tensor([config.SOS_idx] * input_batch.shape[0]), 1)
+        dec_batch_shift = ops.concat((sos_token.astype(mindspore.float32), target_batch[:, :-1].astype(mindspore.float32)), axis=1)
 
         mask_trg = ops.expand_dims(ops.equal(dec_batch_shift, config.PAD_idx), 1)
         pre_logit, attn_dist = self.decoder(self.embedding(dec_batch_shift.astype(mindspore.float32)), encoder_outputs, (mask_src, mask_trg), attention_parameters)
         ## compute output dist
         logit = self.generator(pre_logit, attn_dist, None, None, attn_dist_db=None)
-        
-        ## loss: NNL if ptr else Cross entropy
-        if(train and config.schedule>10):
-            if(random.uniform(0, 1) <= (0.0001 + (1 - 0.0001) * math.exp(-1. * iter / config.schedule))):
-                config.oracle=True
-            else:
-                config.oracle=False
 
         return logit.astype(mindspore.float32), logit_prob.astype(mindspore.float32)
 
@@ -344,8 +330,19 @@ class Loss(nn.LossBase):
         self.criterion = nn.NLLLoss(ignore_index=config.PAD_idx)
         self.cross_entropy = nn.SoftmaxCrossEntropyWithLogits(sparse=True)
 
-    def construct(self, logit, dec_batch, logit_prob, program_label):
-        x = self.criterion(logit.view((-1, logit.shape[-1])), dec_batch.view(-1).astype(mindspore.int32)) + \
+    def construct(self, logit, target_batch, logit_prob, program_label):
+        x = self.criterion(logit.view((-1, logit.shape[-1])), target_batch.view(-1).astype(mindspore.int32)) + \
             self.cross_entropy(logit_prob, Tensor(program_label).astype(mindspore.int32))
+        return self.get_loss(x)
+
+class Loss2(nn.LossBase):
+    def __init__(self):
+        super(Loss2, self).__init__()
+        self.criterion = nn.NLLLoss(ignore_index=config.PAD_idx)
+        self.cross_entropy = nn.SoftmaxCrossEntropyWithLogits(sparse=True)
+
+    def construct(self, logits, target_batch, program_label):
+        x = self.criterion(logits[0].view((-1, logits[0].shape[-1])), target_batch.view(-1).astype(mindspore.int32)) + \
+            self.cross_entropy(logits[1], Tensor(program_label).astype(mindspore.int32))
         return self.get_loss(x)
 

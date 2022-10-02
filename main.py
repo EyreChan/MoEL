@@ -37,17 +37,22 @@ loss_fn = Loss()
 optimizer = nn.Adam(model.trainable_params(), learning_rate=config.lr)
 
 def train(model, dataset, loss_fn, optimizer):
-    def forward_fn(inputs, batch):
-        logit, logit_prob = model(inputs, batch)
-        dec_batch = inputs["target_batch"].astype(mindspore.float32)
+    def forward_fn(inputs):
+        input_batch = inputs["input_batch"].astype(mindspore.float32)
+        target_batch = inputs["target_batch"].astype(mindspore.float32)
+        mask_input = inputs["mask_input"].astype(mindspore.float32)
+        target_program = inputs["target_program"].astype(mindspore.float32)
+        
+        logit, logit_prob = model(input_batch, target_batch, mask_input, target_program)
+
         program_label = inputs["program_label"].astype(mindspore.float32)
-        loss = loss_fn(logit, dec_batch, logit_prob, program_label)
+        loss = loss_fn(logit, target_batch, logit_prob, program_label)
         return loss
 
     grad_fn = ops.value_and_grad(forward_fn, None, optimizer.parameters, has_aux=False)
 
-    def train_step(inputs, batch):
-        loss, grads = grad_fn(inputs, batch)
+    def train_step(inputs):
+        loss, grads = grad_fn(inputs)
         loss = ops.depend(loss, optimizer(grads))
         return loss
 
@@ -55,7 +60,7 @@ def train(model, dataset, loss_fn, optimizer):
     model.set_train()
     for batch, inputs in enumerate(dataset.create_dict_iterator()):
         # Compute prediction error
-        loss = train_step(inputs, batch)
+        loss = train_step(inputs)
 
         if batch % 100 == 0:
             loss, current = loss.asnumpy(), batch
@@ -97,9 +102,9 @@ def test(model, dataset, loss_fn):
 
         logit, logit_prob = model(inputs, batch)
 
-        dec_batch = inputs["target_batch"]
+        target_batch = inputs["target_batch"]
         program_label = inputs["program_label"]
-        test_loss += loss_fn(logit, dec_batch, logit_prob, program_label).asnumpy()
+        test_loss += loss_fn(logit, target_batch, logit_prob, program_label).asnumpy()
 
     test_loss /= num_batches
     # print(f"Test Error: \n BLEU score: {bleu_score}, Avg loss: {test_loss:>8f} \n")
