@@ -123,3 +123,36 @@ for t in range(epochs):
     train(model, dataset_train, loss_fn, optimizer)
     test(model, dataset_test, loss_fn)
 print("Done!")
+
+# Save checkpoint
+mindspore.save_checkpoint(model, "model.ckpt")
+print("Saved Model to model.ckpt")
+
+# Instantiate a random initialized model
+#model = Transformer_experts(vocab, decoder_number=program_number)
+# Load checkpoint and load parameter to model
+#param_dict = mindspore.load_checkpoint("model.ckpt")
+#param_not_load = mindspore.load_param_into_net(model, param_dict)
+
+#model.set_train(False)
+#for batch, inputs in enumerate(dataset.create_dict_iterator()):
+#    sent_b = t.beam_search(inputs, max_dec_step=50)
+#    for i, beam_sent in enumerate(sent_b):
+#        target_batch = list(inputs["target_batch"][i].asnumpy())
+#        target_txt = []
+#        for index in target_batch:
+#            index = index.tolist()
+#            if index in model.vocab.index2word and index not in [0, 1, 2, 3, 4, 5, 6]:
+#                target_txt.append(model.vocab.index2word[index])
+#            else:
+#                continue
+#        rf = " ".join(target_txt)
+#        input_batch = list(inputs["input_batch"][i].asnumpy())
+#        input_txt = []
+#        for index in input_batch:
+#            index = index.tolist()
+#            if index in model.vocab.index2word and index not in [0, 1, 2, 3, 4, 5, 6]:
+#                input_txt.append(model.vocab.index2word[index])
+#            else:
+#                continue
+#        print_custum(dial=[" ".join(input_txt)], ref=rf, hyp_b=beam_sent)   
