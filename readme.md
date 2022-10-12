@@ -7,7 +7,10 @@ This repository contains the MindSpore implementation of the paper:
 
 And this code refers to the [PyTorch implementation](https://github.com/HLTCHKUST/MoEL) from paper authors.
 
-| 测试 | test |
+表头  | 表头  | 表头
+ ---- | ----- | ------  
+ 单元格内容  | 单元格内容 | 单元格内容 
+ 单元格内容  | 单元格内容 | 单元格内容
 
 Setup
 ---
